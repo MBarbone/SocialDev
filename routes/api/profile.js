@@ -156,15 +156,15 @@ router.delete("/", auth, async (req, res) => {
   }
 });
 
-// PUT, add in exp and education. same collection so using PUT not POST
+// POST, add in exp and education
 // Private
 
-router.put(
+router.post(
   "/experience",
   [
     auth,
     [
-      check("title", "TItle is required.")
+      check("title", "Title is required.")
         .not()
         .isEmpty(),
       check("company", "Company is required")
@@ -205,6 +205,67 @@ router.put(
       let profile = await Profile.findOne({ user: req.user.id });
 
       profile.experience.unshift(newExp);
+
+      await profile.save();
+
+      res.json(profile);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server error");
+    }
+  }
+);
+
+// PUT - update experience
+// private
+router.put(
+  "/experience/:experience_id",
+  [
+    auth,
+    [
+      check("title", "Title is required.")
+        .not()
+        .isEmpty(),
+      check("company", "Company is required")
+        .not()
+        .isEmpty(),
+      check("from", "From date is required.")
+        .not()
+        .isEmpty()
+    ]
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const {
+      title,
+      company,
+      location,
+      from,
+      to,
+      current,
+      description
+    } = req.body;
+
+    const updateExp = {
+      title,
+      company,
+      location,
+      from,
+      to,
+      current,
+      description
+    };
+
+    try {
+      let profile = await Profile.findOneAndUpdate({
+        user: req.user.id
+      });
+
+      profile.experience = updateExp;
 
       await profile.save();
 
