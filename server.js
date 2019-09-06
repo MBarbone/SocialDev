@@ -7,7 +7,11 @@ const postRoutes = require("./routes/api/post");
 
 const app = express();
 
+// connect MongoDB
 connectDB();
+
+// Init Body Parser
+app.use(express.json({ extended: false }));
 
 const PORT = process.env.PORT || 5000;
 
