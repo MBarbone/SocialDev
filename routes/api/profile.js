@@ -218,15 +218,98 @@ router.post(
 
 // PUT - update experience
 // private
-router.put(
-  "/experience/:experience_id",
+// router.put(
+//   "/experience/:experience_id",
+//   [
+//     auth,
+//     [
+//       check("title", "Title is required.")
+//         .not()
+//         .isEmpty(),
+//       check("company", "Company is required")
+//         .not()
+//         .isEmpty(),
+//       check("from", "From date is required.")
+//         .not()
+//         .isEmpty()
+//     ]
+//   ],
+//   async (req, res) => {
+//     const errors = validationResult(req);
+//     if (!errors.isEmpty()) {
+//       return res.status(400).json({ errors: errors.array() });
+//     }
+
+//     const {
+//       title,
+//       company,
+//       location,
+//       from,
+//       to,
+//       current,
+//       description
+//     } = req.body;
+
+//     const updateExp = {
+//       title,
+//       company,
+//       location,
+//       from,
+//       to,
+//       current,
+//       description
+//     };
+
+//     try {
+//       let profile = await Profile.findOneAndUpdate({
+//         user: req.user.id
+//       });
+
+//       profile.experience = updateExp;
+
+//       await profile.save();
+
+//       res.json(profile);
+//     } catch (err) {
+//       console.error(err.message);
+//       res.status(500).send("Server error");
+//     }
+//   }
+// );
+
+// Delete Experience
+// Private
+router.delete("/experience/:experience_id", auth, async (req, res) => {
+  try {
+    let profile = await Profile.findOne({ user: req.user.id });
+
+    const removeIndex = profile.experience
+      .map(item => item.id)
+      .indexOf(req.params.experience_id);
+
+    profile.experience.splice(removeIndex, 1);
+
+    await profile.save(res.send(profile));
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+});
+
+// POST Education
+// Private
+router.post(
+  "/education",
   [
     auth,
     [
-      check("title", "Title is required.")
+      check("school", "School is required.")
         .not()
         .isEmpty(),
-      check("company", "Company is required")
+      check("degree", "Degree is required")
+        .not()
+        .isEmpty(),
+      check("field", "Field of study is required.")
         .not()
         .isEmpty(),
       check("from", "From date is required.")
@@ -240,20 +323,12 @@ router.put(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const {
-      title,
-      company,
-      location,
-      from,
-      to,
-      current,
-      description
-    } = req.body;
+    const { school, degree, field, from, to, current, description } = req.body;
 
-    const updateExp = {
-      title,
-      company,
-      location,
+    const newEdu = {
+      school,
+      degree,
+      field,
       from,
       to,
       current,
@@ -261,11 +336,9 @@ router.put(
     };
 
     try {
-      let profile = await Profile.findOneAndUpdate({
-        user: req.user.id
-      });
+      let profile = await Profile.findOne({ user: req.user.id });
 
-      profile.experience = updateExp;
+      profile.education.unshift(newEdu);
 
       await profile.save();
 
@@ -276,5 +349,24 @@ router.put(
     }
   }
 );
+
+// Delete Education
+// Private
+router.delete("/education/:education_id", auth, async (req, res) => {
+  try {
+    let profile = await Profile.findOne({ user: req.user.id });
+
+    const removeIndex = profile.education
+      .map(item => item.id)
+      .indexOf(req.params.education_id);
+
+    profile.education.splice(removeIndex, 1);
+
+    await profile.save(res.send(profile));
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+});
 
 module.exports = router;
