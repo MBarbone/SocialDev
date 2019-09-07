@@ -24,7 +24,7 @@ app.get("/", (req, res) => {
 app.use("/api/users", usersRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/auth", authRoutes);
-app.use("/api/post", postRoutes);
+app.use("/api/posts", postRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server listening at port ${PORT}`);
