@@ -1,4 +1,0 @@
-{
-  "mongoURI": "mongodb+srv://barbone123:barbone123@socialdev-fik9a.mongodb.net/test?retryWrites=true&w=majority",
-  "jwtSecret": "secretPassword"
-}
