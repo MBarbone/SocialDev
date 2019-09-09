@@ -45,7 +45,9 @@ router.post(
       if (!user) {
         return res
           .status(400)
-          .json({ errors: "Invalid credentials. Please try again." });
+          .json({
+            errors: [{ msg: "Invalid Credentials. Please try again." }]
+          });
       }
 
       const isMatch = await bcrypt.compare(password, user.password);
@@ -53,7 +55,9 @@ router.post(
       if (!isMatch) {
         return res
           .status(400)
-          .json({ errors: "Invalid credentials. Please try again." });
+          .json({
+            errors: [{ msg: "Invalid Credentials. Please try again." }]
+          });
       }
 
       const payload = {
