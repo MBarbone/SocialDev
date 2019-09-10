@@ -49,7 +49,7 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
           <i className="fas fa-code" /> SocialDev
         </Link>
       </h1>
-      {!loading && <div>{isAuthenticated ? authLinks : guestLinks}</div>}
+      {!loading && isAuthenticated ? authLinks : guestLinks}
     </nav>
   );
 };
