@@ -157,10 +157,10 @@ router.delete("/", auth, async (req, res) => {
   }
 });
 
-// POST, add in exp and education
+// put, add in exp and education
 // Private
 
-router.post(
+router.put(
   "/experience",
   [
     auth,
@@ -297,9 +297,9 @@ router.delete("/experience/:experience_id", auth, async (req, res) => {
   }
 });
 
-// POST Education
+// PUT Education
 // Private
-router.post(
+router.put(
   "/education",
   [
     auth,
@@ -310,7 +310,7 @@ router.post(
       check("degree", "Degree is required")
         .not()
         .isEmpty(),
-      check("field", "Field of study is required.")
+      check("fieldofstudy", "Field of study is required.")
         .not()
         .isEmpty(),
       check("from", "From date is required.")
@@ -324,12 +324,20 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { school, degree, field, from, to, current, description } = req.body;
+    const {
+      school,
+      degree,
+      fieldofstudy,
+      from,
+      to,
+      current,
+      description
+    } = req.body;
 
     const newEdu = {
       school,
       degree,
-      field,
+      fieldofstudy,
       from,
       to,
       current,
