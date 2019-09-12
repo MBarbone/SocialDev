@@ -1,6 +1,9 @@
 {
   "name": "socialdev",
   "version": "1.0.0",
+  "engines": {
+    "node": "10.15.3"
+  },
   "description": "\"Social app for software engineers and developers\"",
   "main": "index.js",
   "scripts": {
